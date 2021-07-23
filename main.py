@@ -5,7 +5,7 @@
 #                                                                                           #
 #############################################################################################
 __author__ = 'Mihai IDU'
-__version__ = '0.0.2'
+__version__ = '0.0.7'
 
 from time import time, sleep
 from os import path
@@ -111,6 +111,7 @@ def LocalSocket(proc_name, remote_port, remote_host, verbose_level):
         else:
             print(
                 f'\n{time.strftime("%b %d %H:%M:%S")} Process [{proc_name}] is running')
+    return str(msgFromServer[0].decode('ascii'))
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
@@ -131,6 +132,7 @@ if __name__ == '__main__':
     parser.add_argument("-rh", "--remote-host", type=str, help="Prometheus main host")
     parser.add_argument("-sh", "--second-host", type=str, help="Prometheus second host")
     parser.add_argument("-rp","--remote-port", help="Add a new port of the remote communication between main and second process", default=8989)
+    parser.add_argument("-m","--master", action="store_true", help="Mark which node is the master node", default="true")
     args = parser.parse_args()
     port = int(args.prometheus_port)
     proc_name = args.process_name
@@ -138,6 +140,7 @@ if __name__ == '__main__':
     remote_host = args.remote_host
     second_host = args.second_host
     remote_port = args.remote_port
+    master = args.master
     while True:
         if CheckProcess(proc_name) == False and CheckHost(hostname) == True:
             print(
